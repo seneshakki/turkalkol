@@ -574,7 +574,8 @@
 
     <div class="tabs">
       <button class="tab active" onclick="switchTab('photos')">📸 Fotoğraflar</button>
-      <button class="tab" onclick="switchTab('leaderboard')">🏆 Leaderboard</button>
+      <button class="tab" onclick="switchTab('leaderboard')">🎲 Bottle Flip</button>
+      <button class="tab" onclick="switchTab('leaderboard2048')">🧩 2048</button>
     </div>
 
     <div id="photosTab" class="tab-content active">
@@ -614,6 +615,20 @@
         </div>
       </div>
     </div>
+
+    <div id="leaderboard2048Tab" class="tab-content">
+      <div class="card">
+        <div style="display: flex; gap: 14px; margin-bottom: 28px; flex-wrap: wrap;">
+          <button class="btn" onclick="refreshLeaderboard2048()">🔄 Yenile</button>
+          <button class="btn btn-secondary" onclick="confirmResetLeaderboard2048()">⚠️ Tümünü Sil</button>
+        </div>
+        <div class="table-container">
+          <div id="leaderboard2048Container">
+            <div class="empty">Yükleniyor...</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div id="editModal" class="modal">
@@ -641,10 +656,14 @@
       if (tab === 'photos') {
         document.querySelector('.tab:nth-child(1)').classList.add('active');
         document.getElementById('photosTab').classList.add('active');
-      } else {
+      } else if (tab === 'leaderboard') {
         document.querySelector('.tab:nth-child(2)').classList.add('active');
         document.getElementById('leaderboardTab').classList.add('active');
         refreshLeaderboard();
+      } else if (tab === 'leaderboard2048') {
+        document.querySelector('.tab:nth-child(3)').classList.add('active');
+        document.getElementById('leaderboard2048Tab').classList.add('active');
+        refreshLeaderboard2048();
       }
     }
 
@@ -767,6 +786,51 @@
     }
 
     function escapeHtml(text) { const div = document.createElement("div"); div.textContent = text; return div.innerHTML; }
+
+    // ============================================
+    // 2048 LEADERBOARD FUNCTIONS
+    // ============================================
+    async function refreshLeaderboard2048() {
+      const container = document.getElementById("leaderboard2048Container");
+      container.innerHTML = '<div class="empty">Yükleniyor...</div>';
+      try {
+        const res = await fetch("/api/leaderboard?game=2048", { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!data || data.length === 0) { container.innerHTML = '<div class="empty">Henüz skor yok</div>'; return; }
+
+        let html = '<table><thead><tr><th>Sıra</th><th>Kullanıcı</th><th>Skor</th><th>Tarih</th><th>İşlem</th></tr></thead><tbody>';
+        data.forEach((player, index) => {
+          const rankClass = index < 3 ? `rank-${index + 1}` : '';
+          const date = player.updated_at ? new Date(player.updated_at).toLocaleDateString('tr-TR') : '-';
+          html += `<tr><td><span class="rank ${rankClass}">${index + 1}</span></td><td><strong>${escapeHtml(player.username)}</strong></td><td><span class="badge">${player.score}</span></td><td>${date}</td><td class="actions"><button class="btn btn-sm btn-danger" onclick='deleteUser2048(${JSON.stringify(player.username)})'>🗑️</button></td></tr>`;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      } catch (err) { container.innerHTML = '<div class="empty">Yüklenemedi</div>'; }
+    }
+
+    async function deleteUser2048(username) {
+      if (!confirm(`"${username}" silinsin mi?`)) return;
+      try {
+        const res = await fetch(`/api/admin/leaderboard/${encodeURIComponent(username)}?game=2048`, { method: "DELETE", credentials: 'same-origin' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data.success) { showStatus("✅ Silindi", "success"); await refreshLeaderboard2048(); }
+      } catch (err) { alert("Hata: " + err.message); }
+    }
+
+    async function confirmResetLeaderboard2048() {
+      const confirmation = prompt('2048 skorlarını silmek için "2048" yaz:');
+      if (confirmation !== "2048") return;
+      try {
+        const res = await fetch("/api/admin/leaderboard/reset?game=2048", { method: "POST", credentials: 'same-origin' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data.success) { showStatus("✅ 2048 skorları silindi", "success"); await refreshLeaderboard2048(); }
+      } catch (err) { alert("Hata: " + err.message); }
+    }
+
     loadPhotos();
   </script>
 </body>

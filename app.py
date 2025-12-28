@@ -255,11 +255,22 @@ def admin_delete_user(username):
     if request.method == "OPTIONS":
         return "", 204
     try:
+        game_filter = request.args.get('game', '').lower()
         leaderboard = load_leaderboard()
-        new_list = [
-            u for u in leaderboard
-            if u["username"].lower() != username.lower()
-        ]
+        
+        if game_filter:
+            # Belirli oyunun skorunu sil
+            new_list = [
+                u for u in leaderboard
+                if not (u["username"].lower() == username.lower() and u.get("game", "bottleflip").lower() == game_filter)
+            ]
+        else:
+            # Tüm oyunlardan sil
+            new_list = [
+                u for u in leaderboard
+                if u["username"].lower() != username.lower()
+            ]
+        
         if len(new_list) == len(leaderboard):
             return jsonify({"error": "Kullanıcı bulunamadı"}), 404
 
@@ -310,7 +321,17 @@ def admin_reset_board():
     if request.method == "OPTIONS":
         return "", 204
     try:
-        save_leaderboard([])
+        game_filter = request.args.get('game', '').lower()
+        
+        if game_filter:
+            # Sadece belirli oyunun skorlarını sil
+            leaderboard = load_leaderboard()
+            new_list = [u for u in leaderboard if u.get("game", "bottleflip").lower() != game_filter]
+            save_leaderboard(new_list)
+        else:
+            # Tümünü sil
+            save_leaderboard([])
+        
         return jsonify({"success": True})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
