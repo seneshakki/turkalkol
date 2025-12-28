@@ -258,6 +258,11 @@ class Game2048 {
     }
 
     spawnTile() {
+        // Tile oluşturmadan önce boyutların doğru olduğundan emin ol
+        if (!this.tileSize || this.tileSize <= 0) {
+            this.updateDimensions();
+        }
+
         const empty = [];
         for (let r = 0; r < 4; r++) {
             for (let c = 0; c < 4; c++) {
