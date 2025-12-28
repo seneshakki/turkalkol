@@ -44,10 +44,19 @@ class Game2048 {
     updateDimensions() {
         const board = document.querySelector('.board-container');
         if (!board) return;
-        const padding = 12;
-        const size = board.offsetWidth - (padding * 2);
-        this.tileSize = Math.floor((size - 36) / 4);
-        this.gap = 12;
+
+        // CSS ile eşleşen hesaplama:
+        // - board-container'ın içinde grid-background var
+        // - grid-background: inset:12px, gap:12px, 4 sütun
+        // - Tile boyutu = (container içi genişlik - 3 gap) / 4
+        const containerWidth = board.offsetWidth;
+        const padding = 12; // CSS inset değeri
+        const gap = 12; // CSS gap değeri
+        const innerWidth = containerWidth - (padding * 2); // inset sol + sağ
+        const totalGaps = gap * 3; // 4 tile arasında 3 gap
+
+        this.tileSize = Math.floor((innerWidth - totalGaps) / 4);
+        this.gap = gap;
     }
 
     createGrid() {
