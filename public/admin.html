@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Panel - Türk Alkol</title>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-primary: #08080c;
+      --bg-secondary: #0d0d12;
+      --accent: #ff2d55;
+      --accent-orange: #ff6b35;
+      --accent-glow: rgba(255, 45, 85, 0.35);
+      --success: #22c55e;
+      --success-glow: rgba(34, 197, 94, 0.3);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.75);
+      --text-muted: rgba(255, 255, 255, 0.4);
+      --glass-bg: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glow: 0 0 25px var(--accent-glow);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 45, 85, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 100% 50%, rgba(168, 85, 247, 0.08) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .admin-header {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding-bottom: 28px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .admin-logo {
+      width: 50px;
+      height: 50px;
+      filter: drop-shadow(0 0 15px var(--accent-glow));
+      animation: logoPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes logoPulse {
+
+      0%,
+      100% {
+        filter: drop-shadow(0 0 15px var(--accent-glow));
+      }
+
+      50% {
+        filter: drop-shadow(0 0 30px var(--accent-glow));
+      }
+    }
+
+    .admin-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent-orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      padding: 6px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      width: fit-content;
+      margin-bottom: 28px;
+    }
+
+    .tab {
+      padding: 14px 28px;
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .tab:hover {
+      color: var(--text-secondary);
+    }
+
+    .tab.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-orange));
+      color: white;
+      box-shadow: var(--glow);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 24px;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .card-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 20px;
+    }
+
+    /* Stats */
+    .stats {
+      text-align: center;
+      padding: 16px 0;
+    }
+
+    .stats-value {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent-orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      position: relative;
+    }
+
+    .stats-value::after {
+      content: attr(data-value);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      filter: blur(20px);
+      opacity: 0.4;
+    }
+
+    .stats-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* Upload */
+    .upload-area {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    input[type="file"] {
+      flex: 1;
+      min-width: 200px;
+      padding: 16px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    input[type="file"]:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn {
+      padding: 16px 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-orange));
+      border: none;
+      border-radius: var(--radius-sm);
+      color: white;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 6px 25px var(--accent-glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% {
+        left: -100%;
+      }
+
+      20% {
+        left: 100%;
+      }
+
+      100% {
+        left: 100%;
+      }
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 40px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-primary);
+      box-shadow: none;
+    }
+
+    .btn-secondary::before {
+      display: none;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-sm {
+      padding: 10px 16px;
+      font-size: 0.85rem;
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success), #16a34a);
+      box-shadow: 0 6px 25px var(--success-glow);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, var(--accent), #dc2626);
+    }
+
+    /* Status */
+    #status {
+      margin-top: 18px;
+      padding: 16px 20px;
+      border-radius: var(--radius-sm);
+      display: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      backdrop-filter: blur(10px);
+    }
+
+    .success {
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #86efac;
+    }
+
+    .error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+
+    /* Gallery */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 16px;
+    }
+
+    .img-box {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      transition: var(--transition);
+    }
+
+    .img-box:hover {
+      border-color: var(--accent);
+      box-shadow: var(--glow);
+      transform: translateY(-4px);
+    }
+
+    .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .img-box:hover img {
+      transform: scale(1.1);
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 45, 85, 0.9);
+      backdrop-filter: blur(10px);
+      border: none;
+      border-radius: var(--radius-sm);
+      color: white;
+      font-size: 0.9rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .img-box:hover .delete-btn {
+      opacity: 1;
+    }
+
+    /* Table */
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 18px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    th {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+
+    tr {
+      transition: var(--transition);
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .rank {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.9rem;
+      background: var(--glass-border);
+    }
+
+    .rank-1 {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #000;
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+    }
+
+    .rank-2 {
+      background: linear-gradient(135deg, #d1d5db, #9ca3af);
+      color: #000;
+    }
+
+    .rank-3 {
+      background: linear-gradient(135deg, #cd7f32, #b87333);
+      color: #fff;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(20px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 32px;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 28px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 16px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-glow);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .modal-actions .btn {
+      flex: 1;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--text-muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .container {
+        padding: 18px;
+      }
+
+      .admin-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+      }
+
+      .tabs {
+        width: 100%;
+      }
+
+      .tab {
+        flex: 1;
+        text-align: center;
+        padding: 12px 16px;
+      }
+
+      .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <header class="admin-header">
+      <img src="/logo.png" alt="Logo" class="admin-logo">
+      <h1 class="admin-title">Admin Panel</h1>
+    </header>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('photos')">📸 Fotoğraflar</button>
+      <button class="tab" onclick="switchTab('leaderboard')">🏆 Leaderboard</button>
+    </div>
+
+    <div id="photosTab" class="tab-content active">
+      <div class="card">
+        <div class="card-title">İstatistikler</div>
+        <div class="stats">
+          <div class="stats-value" id="countValue">0</div>
+          <div class="stats-label">Toplam Fotoğraf</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Yeni Fotoğraf Yükle</div>
+        <div class="upload-area">
+          <input type="file" id="fileInput" accept="image/*">
+          <button id="uploadBtn" class="btn">✨ Yükle</button>
+        </div>
+        <div id="status"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Galeri</div>
+        <div id="gallery" class="gallery"></div>
+      </div>
+    </div>
+
+    <div id="leaderboardTab" class="tab-content">
+      <div class="card">
+        <div style="display: flex; gap: 14px; margin-bottom: 28px; flex-wrap: wrap;">
+          <button class="btn" onclick="refreshLeaderboard()">🔄 Yenile</button>
+          <button class="btn btn-secondary" onclick="confirmResetLeaderboard()">⚠️ Tümünü Sil</button>
+        </div>
+        <div class="table-container">
+          <div id="leaderboardContainer">
+            <div class="empty">Yükleniyor...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-title">✏️ Skor Düzenle</div>
+      <div class="form-group">
+        <label>Kullanıcı Adı</label>
+        <input type="text" id="editUsername" readonly>
+      </div>
+      <div class="form-group">
+        <label>Yeni Skor</label>
+        <input type="number" id="editScore" min="0">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeEditModal()">İptal</button>
+        <button class="btn" onclick="saveEdit()">Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      if (tab === 'photos') {
+        document.querySelector('.tab:nth-child(1)').classList.add('active');
+        document.getElementById('photosTab').classList.add('active');
+      } else {
+        document.querySelector('.tab:nth-child(2)').classList.add('active');
+        document.getElementById('leaderboardTab').classList.add('active');
+        refreshLeaderboard();
+      }
+    }
+
+    const showStatus = (msg, type) => {
+      const box = document.getElementById("status");
+      box.style.display = "block";
+      box.textContent = msg;
+      box.className = type;
+      setTimeout(() => { box.style.display = "none"; }, 4000);
+    };
+
+    async function loadPhotos() {
+      try {
+        const res = await fetch("/list", { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const gallery = document.getElementById("gallery");
+        gallery.innerHTML = "";
+        if (!Array.isArray(data) || data.length === 0) {
+          document.getElementById("countValue").textContent = 0;
+          gallery.innerHTML = '<div class="empty">Henüz fotoğraf yok</div>';
+          return;
+        }
+        data.forEach(name => {
+          const imgUrl = `/watermarked/${encodeURIComponent(name)}?v=${Date.now()}`;
+          const box = document.createElement("div");
+          box.className = "img-box";
+          box.innerHTML = `<img src="${imgUrl}" loading="lazy" alt="${escapeHtml(name)}"><button class="delete-btn" onclick='deletePhoto(${JSON.stringify(name)})'>🗑️</button>`;
+          gallery.appendChild(box);
+        });
+        document.getElementById("countValue").textContent = data.length;
+      } catch (err) { showStatus("Listeleme hatası: " + err.message, "error"); }
+    }
+
+    async function deletePhoto(name) {
+      if (!confirm(`"${name}" silinsin mi?`)) return;
+      try {
+        const res = await fetch(`/delete/${encodeURIComponent(name)}`, { method: "DELETE", credentials: 'same-origin' });
+        if (res.status === 401) { showStatus("Yetki hatası", "error"); setTimeout(() => window.location.reload(), 1500); return; }
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data.success) { showStatus("✅ Silindi", "success"); await loadPhotos(); }
+      } catch (err) { showStatus("Hata: " + err.message, "error"); }
+    }
+
+    document.getElementById("uploadBtn").onclick = async () => {
+      const file = document.getElementById("fileInput").files[0];
+      if (!file) return showStatus("⚠️ Dosya seç", "error");
+      const formData = new FormData();
+      formData.append("file", file);
+      showStatus("⏳ Yükleniyor...", "success");
+      try {
+        const res = await fetch("/upload", { method: "POST", body: formData, credentials: 'same-origin' });
+        if (res.status === 413) { showStatus("❌ Dosya çok büyük", "error"); return; }
+        if (res.status === 401) { showStatus("❌ Yetki hatası", "error"); setTimeout(() => window.location.reload(), 1500); return; }
+        if (!res.ok) { showStatus(`❌ Hata (${res.status})`, "error"); return; }
+        const data = await res.json();
+        if (data.success) { showStatus("✅ Yüklendi: " + data.file, "success"); document.getElementById("fileInput").value = ""; await loadPhotos(); }
+      } catch (err) { showStatus("Hata: " + err.message, "error"); }
+    };
+
+    let currentEditUser = null;
+
+    async function refreshLeaderboard() {
+      const container = document.getElementById("leaderboardContainer");
+      container.innerHTML = '<div class="empty">Yükleniyor...</div>';
+      try {
+        const res = await fetch("/api/leaderboard", { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!data || data.length === 0) { container.innerHTML = '<div class="empty">Henüz skor yok</div>'; return; }
+
+        let html = '<table><thead><tr><th>Sıra</th><th>Kullanıcı</th><th>Skor</th><th>Combo</th><th>Başarı</th><th>İşlem</th></tr></thead><tbody>';
+        data.forEach((player, index) => {
+          const rankClass = index < 3 ? `rank-${index + 1}` : '';
+          const total = player.total_flips || 0;
+          const succ = player.successful_flips || 0;
+          const rate = total > 0 ? ((succ / total) * 100).toFixed(0) + '%' : '-';
+          const combo = player.longest_combo || 0;
+          html += `<tr><td><span class="rank ${rankClass}">${index + 1}</span></td><td><strong>${escapeHtml(player.username)}</strong></td><td><span class="badge">${player.score}</span></td><td>${combo ? '🔥' + combo + 'x' : '-'}</td><td>${rate}</td><td class="actions"><button class="btn btn-sm btn-success" onclick='openEditModal(${JSON.stringify(player)})'>✏️</button><button class="btn btn-sm btn-danger" onclick='deleteUser(${JSON.stringify(player.username)})'>🗑️</button></td></tr>`;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      } catch (err) { container.innerHTML = '<div class="empty">Yüklenemedi</div>'; }
+    }
+
+    function openEditModal(player) { currentEditUser = player.username; document.getElementById("editUsername").value = player.username; document.getElementById("editScore").value = player.score; document.getElementById("editModal").classList.add("active"); }
+    function closeEditModal() { document.getElementById("editModal").classList.remove("active"); currentEditUser = null; }
+
+    async function saveEdit() {
+      const newScore = parseInt(document.getElementById("editScore").value);
+      if (isNaN(newScore) || newScore < 0) return alert("Geçerli skor girin");
+      try {
+        const res = await fetch(`/api/admin/leaderboard/${encodeURIComponent(currentEditUser)}`, { method: "PUT", headers: { "Content-Type": "application/json" }, credentials: 'same-origin', body: JSON.stringify({ score: newScore }) });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data.success) { showStatus("✅ Güncellendi", "success"); closeEditModal(); await refreshLeaderboard(); }
+      } catch (err) { alert("Hata: " + err.message); }
+    }
+
+    async function deleteUser(username) {
+      if (!confirm(`"${username}" silinsin mi?`)) return;
+      try {
+        const res = await fetch(`/api/admin/leaderboard/${encodeURIComponent(username)}`, { method: "DELETE", credentials: 'same-origin' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data.success) { showStatus("✅ Silindi", "success"); await refreshLeaderboard(); }
+      } catch (err) { alert("Hata: " + err.message); }
+    }
+
+    async function confirmResetLeaderboard() {
+      const confirmation = prompt('Silmek için "SIFIRLA" yaz:');
+      if (confirmation !== "SIFIRLA") return;
+      try {
+        const res = await fetch("/api/admin/leaderboard/reset", { method: "POST", credentials: 'same-origin' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data.success) { showStatus("✅ Tümü silindi", "success"); await refreshLeaderboard(); }
+      } catch (err) { alert("Hata: " + err.message); }
+    }
+
+    function escapeHtml(text) { const div = document.createElement("div"); div.textContent = text; return div.innerHTML; }
+    loadPhotos();
+  </script>
+</body>
+
+</html>

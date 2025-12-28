@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Flip Challenge - TurkAlkol</title>
+  <link rel="icon" href="/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="bottleflip.css">
+</head>
+
+<body>
+
+  <!-- ========== MENU SCREEN ========== -->
+  <div id="loginScreen" class="screen active">
+    <!-- Geri Butonu -->
+    <a href="/" class="back-home-btn" title="Ana Sayfa">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7" />
+      </svg>
+      <span>Ana Sayfa</span>
+    </a>
+    <div class="menu-container">
+
+      <!-- Hero Section -->
+      <div class="hero">
+        <div class="hero-icon-wrapper">
+          <div class="hero-glow"></div>
+          <div class="hero-icon">🥃</div>
+        </div>
+        <h1>FLIP<span class="accent">CHALLENGE</span></h1>
+        <p class="tagline">TurkAlkol Premium Edition</p>
+      </div>
+
+      <!-- Start Form -->
+      <div class="card glass-effect">
+        <input type="text" id="usernameInput" placeholder="İsmini gir..." maxlength="12" autocomplete="off"
+          spellcheck="false">
+        <button id="startBtn" class="btn-primary">
+          <span>OYUNA BAŞLA</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Item/Surface Selectors -->
+      <div class="selector-row">
+        <div class="selector-box glass-effect">
+          <div class="selector-label">🍸 BARDAK / ŞİŞE</div>
+          <div class="selector-scroll" id="itemSelector">
+            <button class="sel-item active" data-item="shotGlass"><span>🥃</span>Shot</button>
+            <button class="sel-item" data-item="beerGlass"><span>🍺</span>Bira</button>
+            <button class="sel-item" data-item="wineGlass"><span>🍷</span>Şarap</button>
+            <button class="sel-item" data-item="whiskyGlass"><span>🥃</span>Viski</button>
+            <button class="sel-item" data-item="rakiBottle"><span>🍶</span>Rakı</button>
+            <button class="sel-item" data-item="vodkaBottle"><span>🍸</span>Votka</button>
+          </div>
+        </div>
+
+        <div class="selector-box glass-effect">
+          <div class="selector-label">🪑 MASA</div>
+          <div class="selector-scroll" id="surfaceSelector">
+            <button class="sel-item active" data-surface="woodBar"><span>🪵</span>Ahşap</button>
+            <button class="sel-item" data-surface="marbleCounter"><span>🪨</span>Mermer</button>
+            <button class="sel-item" data-surface="metalTable"><span>🔩</span>Metal</button>
+            <button class="sel-item" data-surface="glassTable"><span>💎</span>Cam</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="card glass-effect leaderboard">
+        <div class="card-header">
+          <span class="trophy-icon">🏆</span>
+          <span>LİDER TABLOSU</span>
+        </div>
+        <ul id="top5List">
+          <li class="loading">Yükleniyor...</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== GAME SCREEN ========== -->
+  <div id="gameScreen" class="screen">
+
+    <!-- Top HUD -->
+    <header class="game-hud top">
+      <button id="exitBtn" class="hud-btn exit" aria-label="Çık">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div class="score-panel">
+        <div id="comboDisplay" class="combo-text"></div>
+        <div class="score-value" id="currentScore">0</div>
+        <div class="score-label">PUAN</div>
+      </div>
+
+      <div class="hud-group">
+        <button id="itemBtn" class="hud-btn" aria-label="Obje Değiştir" title="Obje">🥃</button>
+        <button id="surfaceBtn" class="hud-btn" aria-label="Masa Değiştir" title="Masa">🪵</button>
+        <button id="soundBtn" class="hud-btn" aria-label="Ses" title="Ses">🔊</button>
+      </div>
+    </header>
+
+    <!-- Canvas Area -->
+    <div class="game-canvas">
+      <canvas id="gameCanvas"></canvas>
+      <div id="messageOverlay" class="floating-message"></div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <footer class="game-hud bottom">
+      <div class="power-wrapper">
+        <div class="power-bar-track">
+          <div id="powerFill" class="power-bar-fill"></div>
+        </div>
+        <span id="powerText" class="power-value">0%</span>
+      </div>
+
+      <button id="flipBtn" class="flip-button">
+        <span class="flip-text">BASILI TUT</span>
+        <span class="flip-hint">ve bırak</span>
+      </button>
+    </footer>
+
+  </div>
+
+  <script src="bottleflip.js"></script>
+  <script>
+    // Item selector
+    document.querySelectorAll('#itemSelector .sel-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#itemSelector .sel-item').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (typeof state !== 'undefined') {
+          state.currentItem = btn.dataset.item;
+          resetObject?.();
+        }
+      });
+    });
+
+    // Surface selector
+    document.querySelectorAll('#surfaceSelector .sel-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#surfaceSelector .sel-item').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (typeof state !== 'undefined') {
+          state.currentSurface = btn.dataset.surface;
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

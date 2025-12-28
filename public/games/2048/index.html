@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>2048</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen-2048" id="loginScreen2048">
+        <a href="/" class="back-home-btn" title="Ana Sayfa">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            <span>Ana Sayfa</span>
+        </a>
+        <div class="login-container-2048">
+            <div class="login-hero">
+                <h1 class="login-title">2048</h1>
+                <p class="login-tagline">Sayıları birleştir, rekoru kır!</p>
+            </div>
+            <div class="login-card">
+                <input type="text" id="playerNameInput" placeholder="İsmini gir..." maxlength="12" autocomplete="off"
+                    spellcheck="false">
+                <button id="startGameBtn" class="start-btn-2048">
+                    <span>OYNA</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+            <div class="leaderboard-2048">
+                <div class="leaderboard-header">
+                    <span class="trophy-icon">🏆</span>
+                    <span>EN İYİ SKORLAR</span>
+                </div>
+                <ul id="leaderboard2048List">
+                    <li class="loading">Yükleniyor...</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2048 Oyunu (başta gizli) -->
+    <div class="game-container hidden" id="gameContainer">
+        <header class="game-header">
+            <button class="back-btn" id="exitGameBtn" title="Çıkış">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <h1 class="game-title">2048</h1>
+            <div class="score-container">
+                <div class="score-box">
+                    <span class="score-label">SKOR</span>
+                    <span class="score-value" id="score">0</span>
+                </div>
+                <div class="score-box">
+                    <span class="score-label">EN İYİ</span>
+                    <span class="score-value" id="bestScore">0</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="player-info">
+            <span id="playerNameDisplay">Oyuncu</span>
+        </div>
+
+        <div class="game-info">
+            <p>Aynı sayıları birleştirerek <strong>2048</strong>'e ulaşın!</p>
+            <button class="new-game-btn" id="newGameBtn">Yeni Oyun</button>
+        </div>
+
+        <div class="board-container">
+            <div class="grid-background" id="gridBackground"></div>
+            <div class="tiles-container" id="tilesContainer"></div>
+        </div>
+
+        <div class="instructions">
+            <p>🎮 Hareket için <strong>Ok tuşları</strong> veya <strong>Kaydırma</strong> kullanın</p>
+        </div>
+    </div>
+
+    <!-- Gizli Sohbet Odası Modal -->
+    <div class="chat-modal" id="chatModal">
+        <div class="chat-overlay" id="chatOverlay"></div>
+        <div class="chat-container">
+
+            <!-- Giriş Ekranı -->
+            <div class="chat-screen" id="loginScreen">
+                <div class="chat-header">
+                    <h2>🔐 Gizli Sohbet</h2>
+                    <button class="close-btn" id="closeChatBtn">&times;</button>
+                </div>
+                <div class="chat-content">
+                    <div class="input-group">
+                        <label for="usernameInput">Kullanıcı Adı</label>
+                        <input type="text" id="usernameInput" placeholder="Kullanıcı adınızı girin" maxlength="20">
+                    </div>
+                    <button class="primary-btn" id="enterLobbyBtn">Lobiye Gir</button>
+                </div>
+            </div>
+
+            <!-- Lobi Ekranı -->
+            <div class="chat-screen hidden" id="lobbyScreen">
+                <div class="chat-header">
+                    <h2>🏠 Lobi</h2>
+                    <div class="header-actions">
+                        <span class="username-display" id="usernameDisplay"></span>
+                        <button class="close-btn" id="closeLobbyBtn">&times;</button>
+                    </div>
+                </div>
+                <div class="chat-content">
+                    <div class="room-actions">
+                        <button class="action-btn" id="createRoomBtn">➕ Oda Oluştur</button>
+                        <button class="action-btn" id="refreshRoomsBtn">🔄 Yenile</button>
+                    </div>
+                    <div class="rooms-list" id="roomsList">
+                        <div class="loading-rooms">Odalar yükleniyor...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Oda Oluşturma Modal -->
+            <div class="create-room-modal hidden" id="createRoomModal">
+                <div class="modal-content">
+                    <h3>Yeni Oda Oluştur</h3>
+                    <div class="input-group">
+                        <label for="roomNameInput">Oda Adı</label>
+                        <input type="text" id="roomNameInput" placeholder="Oda adı" maxlength="30">
+                    </div>
+                    <div class="input-group">
+                        <label for="roomPasswordInput">Şifre (Opsiyonel)</label>
+                        <input type="password" id="roomPasswordInput" placeholder="Boş bırakılabilir">
+                    </div>
+                    <div class="modal-actions">
+                        <button class="secondary-btn" id="cancelCreateBtn">İptal</button>
+                        <button class="primary-btn" id="confirmCreateBtn">Oluştur</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Şifre Girişi Modal -->
+            <div class="password-modal hidden" id="passwordModal">
+                <div class="modal-content">
+                    <h3>🔒 Şifreli Oda</h3>
+                    <div class="input-group">
+                        <label for="joinPasswordInput">Şifre</label>
+                        <input type="password" id="joinPasswordInput" placeholder="Oda şifresini girin">
+                    </div>
+                    <div class="modal-actions">
+                        <button class="secondary-btn" id="cancelJoinBtn">İptal</button>
+                        <button class="primary-btn" id="confirmJoinBtn">Katıl</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sohbet Odası -->
+            <div class="chat-screen hidden" id="chatRoomScreen">
+                <div class="chat-header">
+                    <button class="back-btn" id="backToLobbyBtn">←</button>
+                    <h2 id="roomTitle">Oda</h2>
+                    <div class="header-actions">
+                        <span class="my-role" id="myRoleDisplay">👤</span>
+                        <button class="settings-btn hidden" id="roomSettingsBtn" title="Ayarlar">⚙️</button>
+                        <span class="user-count" id="userCount">0</span>
+                        <button class="close-btn" id="leaveRoomBtn">&times;</button>
+                    </div>
+                </div>
+
+                <!-- Tab Menüsü -->
+                <div class="chat-tabs">
+                    <button class="chat-tab active" data-tab="messages">💬 Mesajlar</button>
+                    <button class="chat-tab" data-tab="users">👥 Kişiler</button>
+                </div>
+
+                <!-- Mesajlar Paneli -->
+                <div class="tab-content active" id="messagesTab">
+                    <div class="messages-container" id="messagesContainer"></div>
+                    <div class="typing-indicator hidden" id="typingIndicator">Biri yazıyor...</div>
+                    <div class="reply-preview hidden" id="replyPreview"></div>
+                    <div class="message-input-container">
+                        <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.zip" hidden>
+                        <button class="file-btn" id="fileBtn" title="Dosya Ekle">📎</button>
+                        <input type="text" id="messageInput" placeholder="Mesajınızı yazın..." maxlength="500">
+                        <button class="send-btn" id="sendMessageBtn">➤</button>
+                    </div>
+                </div>
+
+                <!-- Kişiler Paneli -->
+                <div class="tab-content" id="usersTab">
+                    <div class="users-list" id="usersList"></div>
+                </div>
+            </div>
+
+            <!-- Ayarlar Modal (Kurucu için) -->
+            <div class="settings-modal hidden" id="settingsModal">
+                <div class="modal-content">
+                    <h3>⚙️ Oda Ayarları</h3>
+                    <div class="input-group">
+                        <label>Yeni Şifre</label>
+                        <input type="password" id="newPasswordInput" placeholder="Boş = şifre kaldır">
+                    </div>
+                    <div class="modal-actions">
+                        <button class="secondary-btn" id="cancelSettingsBtn">İptal</button>
+                        <button class="primary-btn" id="saveSettingsBtn">Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bağlantı Durumu -->
+    <div class="connection-status hidden" id="connectionStatus">
+        <span class="status-dot"></span>
+        <span class="status-text">Bağlanıyor...</span>
+    </div>
+
+    <script src="game.js?v=2"></script>
+    <script src="chat.js"></script>
+</body>
+
+</html>

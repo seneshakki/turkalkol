@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Türk Alkol</title>
+  <meta name="description" content="Türk Alkol - Fotoğraf Galerisi">
+  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+
+<body>
+
+  <!-- 18+ Yaş Doğrulama Popup -->
+  <div id="ageVerification" class="age-modal">
+    <div class="age-modal-content">
+      <div class="age-icon">🍺</div>
+      <h2>Yaş Doğrulama</h2>
+      <p>Bu site alkollü içecekler hakkında içerik barındırmaktadır.</p>
+      <p class="age-warning">18 yaşından büyük müsünüz?</p>
+      <div class="age-buttons">
+        <button id="ageYes" class="age-btn age-btn-yes"
+          onclick="document.getElementById('ageVerification').classList.add('hidden'); document.body.style.overflow='';">Evet,
+          18 yaşından büyüğüm</button>
+        <button id="ageNo" class="age-btn age-btn-no"
+          onclick="window.location.href='https://www.google.com';">Hayır</button>
+      </div>
+      <p class="age-disclaimer">Bu siteye girerek yasal içki satın alma yaşında olduğunuzu onaylıyorsunuz.</p>
+    </div>
+  </div>
+
+  <!-- Floating Particles Background -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Christmas Snowfall -->
+  <div class="snowfall" id="snowfall"></div>
+
+  <!-- Animated Gradient Orbs -->
+  <div class="orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <header class="header">
+    <button id="menuBtn" class="menu-btn" aria-label="Menü">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <div class="logo-section">
+      <img src="/logo.png" alt="TurkAlkol" class="logo">
+      <span class="brand-text">TURKALKOL</span>
+    </div>
+
+    <div class="toggle-container">
+      <label class="toggle">
+        <input type="checkbox" id="drunkToggle">
+        <span class="toggle-slider"></span>
+        <span class="toggle-label">Sarhoş Modu</span>
+      </label>
+    </div>
+  </header>
+
+  <!-- Yan Menü -->
+  <nav id="sideMenu" class="side-menu" aria-hidden="true">
+    <div class="side-menu-header">
+      <span class="side-menu-title">🎮 Oyunlar</span>
+    </div>
+    <a href="/games/bottleflip" class="side-menu-item">
+      <span class="side-menu-icon">🥤</span>
+      <span>Bottle Flip</span>
+      <span class="badge-beta">Beta</span>
+    </a>
+    <a href="/games/2048" class="side-menu-item">
+      <span class="side-menu-icon">🎯</span>
+      <span>2048</span>
+      <span class="badge-beta">Yeni</span>
+    </a>
+  </nav>
+  <div id="menuOverlay" class="menu-overlay"></div>
+
+  <main class="main">
+    <div class="gallery-container">
+      <!-- Photo Counter -->
+      <div class="photo-info">
+        <span id="photoNumber">#0 / 0</span>
+      </div>
+
+      <!-- Photo Display -->
+      <div id="photoWrap" class="photo-wrap glass-card">
+        <img id="mainPhoto" src="" alt="Fotoğraf" draggable="false">
+        <button id="openLightbox" class="lightbox-trigger" aria-label="Büyüt"></button>
+        <div class="photo-glow"></div>
+      </div>
+
+      <!-- Like Section -->
+      <div class="like-section">
+        <button id="likeBtn" class="like-btn glass-btn" aria-label="Beğen">
+          <span class="heart-icon">🤍</span>
+          <span id="likeCount">...</span>
+          <div class="heart-particles" id="heartParticles"></div>
+        </button>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <button id="prevBtn" class="btn glass-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>Önceki</span>
+        </button>
+        <button id="randBtn" class="btn btn-accent">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"></path>
+          </svg>
+          <span>Rastgele</span>
+          <div class="btn-shine"></div>
+        </button>
+        <button id="nextBtn" class="btn glass-btn">
+          <span>Sonraki</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <a id="downloadBtn" href="#" download class="download-btn glass-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"></path>
+        </svg>
+        <span>İndir</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>
+      Made by
+      <a href="https://www.instagram.com/seneshakki" target="_blank" rel="noopener">EHS</a> ·
+      <a href="https://www.instagram.com/anilakyolllll" target="_blank" rel="noopener">UNISH</a> ·
+      <a href="https://www.instagram.com/r3kt_cakar" target="_blank" rel="noopener">CHACHA</a>
+    </p>
+    <p class="copyright">© turkalkol.com</p>
+  </footer>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <div class="lightbox-backdrop" id="lbBackdrop"></div>
+    <div class="lightbox-content">
+      <img id="lbImg" alt="Fotoğraf" />
+      <button id="lbClose" class="lightbox-close glass-btn" aria-label="Kapat">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script src="/js/script.js"></script>
+  <script>
+    // Create floating particles
+    function createParticles() {
+      const container = document.getElementById('particles');
+      const count = window.innerWidth < 768 ? 15 : 30;
+
+      for (let i = 0; i < count; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 20 + 's';
+        particle.style.animationDuration = (15 + Math.random() * 15) + 's';
+        container.appendChild(particle);
+      }
+    }
+    createParticles();
+
+    // Christmas Snowfall ❄️
+    function createSnowfall() {
+      const container = document.getElementById('snowfall');
+      const snowCount = window.innerWidth < 768 ? 40 : 80;
+
+      for (let i = 0; i < snowCount; i++) {
+        const snow = document.createElement('div');
+        snow.className = 'snowflake';
+
+        const size = Math.random() * 4 + 2;
+        const startX = Math.random() * 100;
+        const delay = Math.random() * 10;
+        const duration = Math.random() * 5 + 8;
+        const drift = (Math.random() - 0.5) * 100;
+
+        snow.style.cssText = `
+          position: absolute;
+          width: ${size}px;
+          height: ${size}px;
+          background: white;
+          border-radius: 50%;
+          left: ${startX}%;
+          top: -10px;
+          opacity: ${Math.random() * 0.6 + 0.4};
+          box-shadow: 0 0 ${size * 2}px rgba(255,255,255,0.5);
+          animation: snowfall ${duration}s linear ${delay}s infinite;
+          --drift: ${drift}px;
+        `;
+        container.appendChild(snow);
+      }
+    }
+    createSnowfall();
+  </script>
+</body>
+
+</html>

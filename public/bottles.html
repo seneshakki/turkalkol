@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Şişe Galerisi - Türk Alkol</title>
+    <meta name="description" content="Türk Alkol - Şişe Koleksiyonu">
+    <link rel="icon" type="image/png" href="/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/styles.css" />
+</head>
+
+<body class="sober">
+
+    <!-- Floating Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Animated Gradient Orbs -->
+    <div class="orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <header class="header">
+        <a href="/" class="logo-section" style="text-decoration: none;">
+            <img src="/logo.png" alt="TurkAlkol" class="logo">
+            <span class="brand-text">TURKALKOL</span>
+        </a>
+    </header>
+
+    <main class="bottle-section">
+        <h1 class="bottle-section-title">🥃 Şişe Koleksiyonu</h1>
+        <p class="bottle-section-subtitle">Alkol şişeleri ve markaları</p>
+
+        <!-- Kategori Filtreleri -->
+        <div class="bottle-categories">
+            <button class="category-btn active" data-category="all">
+                <span class="emoji">🍾</span>Tümü
+            </button>
+            <button class="category-btn" data-category="raki">
+                <span class="emoji">🥃</span>Rakı
+            </button>
+            <button class="category-btn" data-category="viski">
+                <span class="emoji">🥃</span>Viski
+            </button>
+            <button class="category-btn" data-category="vodka">
+                <span class="emoji">🍸</span>Vodka
+            </button>
+            <button class="category-btn" data-category="bira">
+                <span class="emoji">🍺</span>Bira
+            </button>
+            <button class="category-btn" data-category="sarap">
+                <span class="emoji">🍷</span>Şarap
+            </button>
+            <button class="category-btn" data-category="shot">
+                <span class="emoji">🥃</span>Shot
+            </button>
+        </div>
+
+        <!-- Şişe Grid -->
+        <div class="bottle-grid" id="bottleGrid">
+
+            <!-- RAKI -->
+            <div class="bottle-card" data-category="raki">
+                <span class="bottle-badge popular">Popüler</span>
+                <img src="/images/bottles/raki/yeni-raki.png" alt="Yeni Rakı">
+                <div class="bottle-card-info">
+                    <div class="bottle-name">Yeni Rakı</div>
+                    <div class="bottle-category">Rakı</div>
+                </div>
+            </div>
+
+            <!-- VİSKİ -->
+            <div class="bottle-card" data-category="viski">
+                <span class="bottle-badge premium">Premium</span>
+                <img src="/images/bottles/viski/jack-daniels.png" alt="Jack Daniels">
+                <div class="bottle-card-info">
+                    <div class="bottle-name">Jack Daniel's</div>
+                    <div class="bottle-category">Viski</div>
+                </div>
+            </div>
+
+            <!-- VODKA -->
+            <div class="bottle-card" data-category="vodka">
+                <img src="/images/bottles/vodka/istanblue.png" alt="İstanblue">
+                <div class="bottle-card-info">
+                    <div class="bottle-name">İstanblue</div>
+                    <div class="bottle-category">Vodka</div>
+                </div>
+            </div>
+
+            <!-- BİRA -->
+            <div class="bottle-card" data-category="bira">
+                <img src="/images/bottles/bira/efes.png" alt="Efes">
+                <div class="bottle-card-info">
+                    <div class="bottle-name">Efes Pilsen</div>
+                    <div class="bottle-category">Bira</div>
+                </div>
+            </div>
+
+            <!-- ŞARAP -->
+            <div class="bottle-card" data-category="sarap">
+                <img src="/images/bottles/sarap/kavaklidere.png" alt="Kavaklıdere">
+                <div class="bottle-card-info">
+                    <div class="bottle-name">Kavaklıdere</div>
+                    <div class="bottle-category">Şarap</div>
+                </div>
+            </div>
+
+            <!-- SHOT -->
+            <div class="bottle-card" data-category="shot">
+                <span class="bottle-badge new">Yeni</span>
+                <img src="/images/bottles/shot/jagermeister.png" alt="Jagermeister">
+                <div class="bottle-card-info">
+                    <div class="bottle-name">Jägermeister</div>
+                    <div class="bottle-category">Shot</div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>
+            Made by
+            <a href="https://www.instagram.com/seneshakkii" target="_blank" rel="noopener">EHS</a> ·
+            <a href="https://www.instagram.com/anilakyolllll" target="_blank" rel="noopener">UNISH</a> ·
+            <a href="https://www.instagram.com/r3kt_cakar" target="_blank" rel="noopener">CHACHA</a>
+        </p>
+        <p class="copyright">© turkalkol.com</p>
+    </footer>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" aria-hidden="true">
+        <div class="lightbox-backdrop" id="lbBackdrop"></div>
+        <div class="lightbox-content">
+            <img id="lbImg" alt="Şişe" />
+            <button id="lbClose" class="lightbox-close glass-btn" aria-label="Kapat">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Particle oluştur
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const count = window.innerWidth < 768 ? 15 : 30;
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 15) + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Kategori filtreleme
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const cards = document.querySelectorAll('.bottle-card');
+
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const category = btn.dataset.category;
+
+                cards.forEach(card => {
+                    if (category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Lightbox
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lbImg');
+        const lbClose = document.getElementById('lbClose');
+        const lbBackdrop = document.getElementById('lbBackdrop');
+
+        document.querySelectorAll('.bottle-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const img = card.querySelector('img');
+                if (img) {
+                    lbImg.src = img.src;
+                    lightbox.setAttribute('aria-hidden', 'false');
+                }
+            });
+        });
+
+        function closeLightbox() {
+            lightbox.setAttribute('aria-hidden', 'true');
+        }
+
+        lbClose.addEventListener('click', closeLightbox);
+        lbBackdrop.addEventListener('click', closeLightbox);
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "secret-chat-server",
+  "version": "1.0.0",
+  "description": "WebSocket server for secret chatroom - NO LOGS",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "ws": "^8.14.2"
+  }
+}
