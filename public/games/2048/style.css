@@ -223,6 +223,8 @@ body {
     border-radius: 12px;
     font-weight: 700;
     transition: all 0.15s ease-out;
+    width: var(--tile-size) !important;
+    height: var(--tile-size) !important;
 }
 
 .tile-2 {

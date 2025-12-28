@@ -57,6 +57,9 @@ class Game2048 {
 
         this.tileSize = Math.floor((innerWidth - totalGaps) / 4);
         this.gap = gap;
+
+        // CSS Variable güncelle - Tüm tile'lar bu boyutu alacak
+        document.documentElement.style.setProperty('--tile-size', this.tileSize + 'px');
     }
 
     createGrid() {
@@ -292,8 +295,6 @@ class Game2048 {
         else fontSize = this.tileSize * 0.3;
 
         el.style.cssText = `
-            width: ${this.tileSize}px;
-            height: ${this.tileSize}px;
             left: ${pos.x}px;
             top: ${pos.y}px;
             font-size: ${fontSize}px;
