@@ -1049,6 +1049,7 @@ async function saveScore() {
             body: JSON.stringify({
                 username: state.username,
                 score: state.score,
+                game: 'bottleflip', // Explicitly specify game type
                 stats: {
                     longestCombo: state.bestCombo
                 }
@@ -1062,7 +1063,7 @@ async function loadLeaderboard() {
     ui.leaderboard.innerHTML = '<li>Yükleniyor...</li>';
 
     try {
-        const res = await fetch('/api/leaderboard');
+        const res = await fetch('/api/leaderboard?game=bottleflip');
         const data = await res.json();
 
         ui.leaderboard.innerHTML = '';
