@@ -16,24 +16,22 @@ const filesToObfuscate = [
     'public/js/script.js'
 ];
 
-// Güvenli obfuscation ayarları (siteyi bozmaz)
+// Güvenli obfuscation ayarları (hafif - bellek dostu)
 const obfuscationOptions = {
     compact: true,
-    controlFlowFlattening: true,
-    controlFlowFlatteningThreshold: 0.3,
-    deadCodeInjection: true,
-    deadCodeInjectionThreshold: 0.1,
+    controlFlowFlattening: false, // KAPALI - bellek tasarrufu
+    deadCodeInjection: false, // KAPALI - bellek tasarrufu
     debugProtection: false,
     disableConsoleOutput: false,
     identifierNamesGenerator: 'hexadecimal',
     log: false,
-    numbersToExpressions: true,
-    renameGlobals: false, // Global'ları değiştirME (DOM erişimi bozulmasın)
-    selfDefending: false, // Development'ta kapalı
+    numbersToExpressions: false, // KAPALI - bellek tasarrufu
+    renameGlobals: false,
+    selfDefending: false,
     simplify: true,
-    splitStrings: false, // KAPALI - DOM ID'leri korunsun
-    stringArray: false, // KAPALI - String'ler encode edilmesin
-    transformObjectKeys: false, // Object key'leri değiştirME (JSON parse sorunları)
+    splitStrings: false,
+    stringArray: false,
+    transformObjectKeys: false,
     unicodeEscapeSequence: false
 };
 

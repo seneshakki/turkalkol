@@ -283,20 +283,43 @@ class Game2048 {
         el.className = `tile tile-${tile.value <= 2048 ? tile.value : 'super'}${isNew ? ' tile-new' : ''}`;
         el.textContent = tile.value;
 
-        const pos = this.getPos(r, c);
-        const fs = tile.value < 100 ? this.tileSize * 0.5 : tile.value < 1000 ? this.tileSize * 0.4 : this.tileSize * 0.3;
+        // Güvenli boyut hesaplaması - her seferinde yeniden hesapla
+        const board = document.querySelector('.board-container');
+        const containerWidth = board ? board.offsetWidth : 400;
+        const padding = 12;
+        const gap = 12;
+        const innerWidth = containerWidth - (padding * 2);
+        const calculatedTileSize = Math.floor((innerWidth - (gap * 3)) / 4);
+        const safeTileSize = calculatedTileSize > 20 ? calculatedTileSize : 80; // minimum 80px
+
+        const posX = c * (safeTileSize + gap);
+        const posY = r * (safeTileSize + gap);
+
+        // Font boyutu sayıya göre ayarla
+        let fontSize;
+        if (tile.value < 100) {
+            fontSize = safeTileSize * 0.5;
+        } else if (tile.value < 1000) {
+            fontSize = safeTileSize * 0.4;
+        } else {
+            fontSize = safeTileSize * 0.3;
+        }
 
         el.style.cssText = `
-            width: ${this.tileSize}px;
-            height: ${this.tileSize}px;
-            left: ${pos.x}px;
-            top: ${pos.y}px;
-            font-size: ${fs}px;
+            width: ${safeTileSize}px;
+            height: ${safeTileSize}px;
+            left: ${posX}px;
+            top: ${posY}px;
+            font-size: ${fontSize}px;
             transition: left 0.15s ease, top 0.15s ease;
         `;
 
         this.tilesContainer.appendChild(el);
         this.tileElements[tile.id] = el;
+
+        // Ayrıca class değişkenlerini güncelle
+        this.tileSize = safeTileSize;
+        this.gap = gap;
 
         if (isNew) {
             setTimeout(() => el.classList.remove('tile-new'), 200);
