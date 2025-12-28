@@ -223,8 +223,11 @@ body {
     border-radius: 12px;
     font-weight: 700;
     transition: all 0.15s ease-out;
+    /* Desktop: (450px - 24px padding - 36px gaps) / 4 = 97.5px */
+    --tile-size: calc((450px - 24px - 36px) / 4);
     width: var(--tile-size) !important;
     height: var(--tile-size) !important;
+    font-size: 2.5rem;
 }
 
 .tile-2 {
@@ -1368,6 +1371,14 @@ body {
     .chat-container {
         max-width: 95%;
     }
+
+    .tile {
+        /* 95vw container - 24px padding - 36px gaps / 4 */
+        --tile-size: calc((95vw - 24px - 36px) / 4);
+        width: var(--tile-size) !important;
+        height: var(--tile-size) !important;
+        font-size: clamp(1.5rem, 6vw, 2.2rem);
+    }
 }
 
 /* Scrollbar Styling */
@@ -1511,6 +1522,12 @@ body {
 
     .tile {
         border-radius: 8px;
+        /* Mobile: calc container - padding - gaps / 4 tiles */
+        /* Container = 100vw - 30px, padding = 16px, gap = 8px*3 = 24px */
+        --tile-size: calc((100vw - 30px - 16px - 24px) / 4);
+        width: var(--tile-size) !important;
+        height: var(--tile-size) !important;
+        font-size: clamp(1.2rem, 5vw, 2rem);
     }
 
     .game-info {
@@ -1589,6 +1606,15 @@ body {
 
     .tiles-container {
         inset: 6px;
+    }
+
+    .tile {
+        border-radius: 6px;
+        /* Extra small: less padding (6px*2) and gaps (6px*3) */
+        --tile-size: calc((100vw - 30px - 12px - 18px) / 4);
+        width: var(--tile-size) !important;
+        height: var(--tile-size) !important;
+        font-size: clamp(1rem, 4.5vw, 1.8rem);
     }
 }
 
