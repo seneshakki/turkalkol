@@ -283,43 +283,25 @@ class Game2048 {
         el.className = `tile tile-${tile.value <= 2048 ? tile.value : 'super'}${isNew ? ' tile-new' : ''}`;
         el.textContent = tile.value;
 
-        // Güvenli boyut hesaplaması - her seferinde yeniden hesapla
-        const board = document.querySelector('.board-container');
-        const containerWidth = board ? board.offsetWidth : 400;
-        const padding = 12;
-        const gap = 12;
-        const innerWidth = containerWidth - (padding * 2);
-        const calculatedTileSize = Math.floor((innerWidth - (gap * 3)) / 4);
-        const safeTileSize = calculatedTileSize > 20 ? calculatedTileSize : 80; // minimum 80px
+        // Sadece global hesaplanmış tileSize kullan - Polling ile bunun doğru olduğundan emin olunuyor
+        const pos = this.getPos(r, c);
 
-        const posX = c * (safeTileSize + gap);
-        const posY = r * (safeTileSize + gap);
-
-        // Font boyutu sayıya göre ayarla
         let fontSize;
-        if (tile.value < 100) {
-            fontSize = safeTileSize * 0.5;
-        } else if (tile.value < 1000) {
-            fontSize = safeTileSize * 0.4;
-        } else {
-            fontSize = safeTileSize * 0.3;
-        }
+        if (tile.value < 100) fontSize = this.tileSize * 0.5;
+        else if (tile.value < 1000) fontSize = this.tileSize * 0.4;
+        else fontSize = this.tileSize * 0.3;
 
         el.style.cssText = `
-            width: ${safeTileSize}px;
-            height: ${safeTileSize}px;
-            left: ${posX}px;
-            top: ${posY}px;
+            width: ${this.tileSize}px;
+            height: ${this.tileSize}px;
+            left: ${pos.x}px;
+            top: ${pos.y}px;
             font-size: ${fontSize}px;
             transition: left 0.15s ease, top 0.15s ease;
         `;
 
         this.tilesContainer.appendChild(el);
         this.tileElements[tile.id] = el;
-
-        // Ayrıca class değişkenlerini güncelle
-        this.tileSize = safeTileSize;
-        this.gap = gap;
 
         if (isNew) {
             setTimeout(() => el.classList.remove('tile-new'), 200);
@@ -332,8 +314,13 @@ class Game2048 {
 
         el.className = `tile tile-${tile.value <= 2048 ? tile.value : 'super'} tile-merged`;
         el.textContent = tile.value;
-        const fs = tile.value < 100 ? this.tileSize * 0.5 : tile.value < 1000 ? this.tileSize * 0.4 : this.tileSize * 0.3;
-        el.style.fontSize = fs + 'px';
+
+        let fontSize;
+        if (tile.value < 100) fontSize = this.tileSize * 0.5;
+        else if (tile.value < 1000) fontSize = this.tileSize * 0.4;
+        else fontSize = this.tileSize * 0.3;
+
+        el.style.fontSize = fontSize + 'px';
 
         setTimeout(() => el.classList.remove('tile-merged'), 200);
     }
@@ -341,10 +328,10 @@ class Game2048 {
     canMove() {
         for (let r = 0; r < 4; r++) {
             for (let c = 0; c < 4; c++) {
-                if (!this.grid[r][c]) return true;
-                const v = this.grid[r][c].value;
-                if (c < 3 && this.grid[r][c + 1]?.value === v) return true;
-                if (r < 3 && this.grid[r + 1][c]?.value === v) return true;
+                const tile = this.grid[r][c];
+                if (!tile) return true;
+                if (c < 3 && tile.value === this.grid[r][c + 1]?.value) return true;
+                if (r < 3 && tile.value === this.grid[r + 1][c]?.value) return true;
             }
         }
         return false;
@@ -363,59 +350,67 @@ class Game2048 {
         if (this.bestScoreElement) this.bestScoreElement.textContent = this.bestScore;
     }
 
-    showGameOver() {
-        // Skoru kaydet
-        saveScore2048(this.score);
+    showGameOver(won) {
+        this.gameOver = true;
 
-        const overlay = document.createElement('div');
-        overlay.className = 'game-over-overlay';
-        overlay.innerHTML = `
-            <h2>Oyun Bitti!</h2>
-            <p>Skor: ${this.score}</p>
-            <button class="new-game-btn" onclick="game.newGame()">Tekrar Oyna</button>
-            <button class="secondary-btn" onclick="exitToMenu()">Ana Menü</button>
+        // Skor kaydet
+        if (this.score > 0) {
+            saveScore2048(this.score);
+        }
+
+        const msg = document.createElement('div');
+        msg.className = 'game-message ' + (won ? 'game-won' : 'game-over');
+        msg.innerHTML = `
+            <p>${won ? 'Kazandın!' : 'Oyun Bitti!'}</p>
+            <div class="actions">
+                <button class="retry-btn">Tekrar Oyna</button>
+            </div>
         `;
-        document.querySelector('.board-container')?.appendChild(overlay);
+
+        document.querySelector('.board-container').appendChild(msg);
+
+        msg.querySelector('.retry-btn').addEventListener('click', () => {
+            msg.remove();
+            this.newGame();
+        });
     }
 }
 
 // ============================================
-// LOGIN SCREEN FUNCTIONS
+// GLOBAL FUNCTIONS
 // ============================================
+
+let game;
+
 function initLoginScreen() {
-    const loginScreen = document.getElementById('loginScreen2048');
-    const gameContainer = document.getElementById('gameContainer');
     const startBtn = document.getElementById('startGameBtn');
     const nameInput = document.getElementById('playerNameInput');
 
-    // Önceki ismi yükle
-    if (playerName && nameInput) {
-        nameInput.value = playerName;
-    }
-
-    // Start button
-    startBtn?.addEventListener('click', () => startGame());
-
-    // Enter tuşu ile başlat
-    nameInput?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') startGame();
-    });
+    // Kayıtlı nick varsa doldur
+    const savedName = localStorage.getItem('player2048Name');
+    if (savedName) nameInput.value = savedName;
 
     // Leaderboard yükle
     loadLeaderboard2048();
+
+    const tryStartToken = () => {
+        const name = nameInput.value.trim();
+        if (name.length < 2) {
+            alert('Lütfen geçerli bir isim girin (en az 2 karakter)');
+            return;
+        }
+        startGame(name);
+    };
+
+    startBtn.addEventListener('click', tryStartToken);
+
+    // Enter tuşu ile başlat
+    nameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') tryStartToken();
+    });
 }
 
-function startGame() {
-    const nameInput = document.getElementById('playerNameInput');
-    const name = nameInput?.value.trim() || '';
-
-    if (name.length < 2) {
-        alert('Lütfen en az 2 karakterlik bir isim girin!');
-        nameInput?.focus();
-        return;
-    }
-
-    // İsmi kaydet
+function startGame(name) {
     playerName = name;
     localStorage.setItem('player2048Name', playerName);
 
@@ -429,15 +424,29 @@ function startGame() {
     document.getElementById('loginScreen2048')?.classList.add('hidden');
     document.getElementById('gameContainer')?.classList.remove('hidden');
 
-    // Oyunu başlat - requestAnimationFrame ile boyutların doğru hesaplanmasını sağla
+    // Oyunu başlat - POLLING ile board görünür olana kadar bekle
     if (typeof game !== 'undefined') {
-        // DOM'un render edilmesini bekle
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
+        // Eski timer varsa temizle (defansif)
+        if (window.gameStartTimer) clearInterval(window.gameStartTimer);
+
+        const board = document.querySelector('.board-container');
+        let attempts = 0;
+
+        window.gameStartTimer = setInterval(() => {
+            attempts++;
+            // Board görünür mü ve genişliği var mı?
+            if (board && board.offsetWidth > 0) {
+                clearInterval(window.gameStartTimer);
                 game.updateDimensions();
                 game.newGame();
-            });
-        });
+                console.log("Game started! Board width:", board.offsetWidth, "Tile size:", game.tileSize);
+            } else if (attempts > 50) { // 2.5 saniye geçti hala yoksa
+                // Fallback: Zorla başlat ama muhtemelen bozuk olacak
+                clearInterval(window.gameStartTimer);
+                game.updateDimensions();
+                game.newGame();
+            }
+        }, 50); // 50ms'de bir kontrol et
     }
 }
 
@@ -531,7 +540,7 @@ function openSecretChat() {
 // ============================================
 // INITIALIZATION
 // ============================================
-let game;
+// let game; // Yukarıda tanımlandı
 document.addEventListener('DOMContentLoaded', () => {
     initLoginScreen();
     game = new Game2048();
