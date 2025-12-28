@@ -392,12 +392,15 @@ function startGame() {
     document.getElementById('loginScreen2048')?.classList.add('hidden');
     document.getElementById('gameContainer')?.classList.remove('hidden');
 
-    // Oyunu başlat - timeout ile boyutların doğru hesaplanmasını sağla
+    // Oyunu başlat - requestAnimationFrame ile boyutların doğru hesaplanmasını sağla
     if (typeof game !== 'undefined') {
-        setTimeout(() => {
-            game.updateDimensions();
-            game.newGame();
-        }, 50);
+        // DOM'un render edilmesini bekle
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                game.updateDimensions();
+                game.newGame();
+            });
+        });
     }
 }
 
