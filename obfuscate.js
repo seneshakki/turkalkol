@@ -20,9 +20,9 @@ const filesToObfuscate = [
 const obfuscationOptions = {
     compact: true,
     controlFlowFlattening: true,
-    controlFlowFlatteningThreshold: 0.4,
+    controlFlowFlatteningThreshold: 0.3,
     deadCodeInjection: true,
-    deadCodeInjectionThreshold: 0.2,
+    deadCodeInjectionThreshold: 0.1,
     debugProtection: false,
     disableConsoleOutput: false,
     identifierNamesGenerator: 'hexadecimal',
@@ -31,19 +31,8 @@ const obfuscationOptions = {
     renameGlobals: false, // Global'ları değiştirME (DOM erişimi bozulmasın)
     selfDefending: false, // Development'ta kapalı
     simplify: true,
-    splitStrings: true,
-    splitStringsChunkLength: 10,
-    stringArray: true,
-    stringArrayCallsTransform: true,
-    stringArrayEncoding: ['base64'],
-    stringArrayIndexShift: true,
-    stringArrayRotate: true,
-    stringArrayShuffle: true,
-    stringArrayWrappersCount: 2,
-    stringArrayWrappersChainedCalls: true,
-    stringArrayWrappersParametersMaxCount: 4,
-    stringArrayWrappersType: 'function',
-    stringArrayThreshold: 0.75,
+    splitStrings: false, // KAPALI - DOM ID'leri korunsun
+    stringArray: false, // KAPALI - String'ler encode edilmesin
     transformObjectKeys: false, // Object key'leri değiştirME (JSON parse sorunları)
     unicodeEscapeSequence: false
 };
