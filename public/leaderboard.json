@@ -1,13 +1,13 @@
 [
   {
     "username": "ehssss",
-    "score": 37,
+    "score": 131,
     "total_flips": 51,
-    "successful_flips": 9,
-    "longest_combo": 8,
+    "successful_flips": 10,
+    "longest_combo": 11,
     "games_played": 18,
     "created_at": "2025-11-17T11:20:19.468559",
-    "updated_at": "2025-11-21T22:23:09.990101"
+    "updated_at": "2025-12-26T16:40:26.735489"
   },
   {
     "username": "sa",
@@ -27,7 +27,7 @@
     "longest_combo": 4,
     "games_played": 28,
     "created_at": "2025-11-17T12:02:23.077150",
-    "updated_at": "2025-11-19T11:12:22.518070"
+    "updated_at": "2025-12-26T18:04:32.041379"
   },
   {
     "username": "331",
@@ -77,17 +77,7 @@
     "longest_combo": 3,
     "games_played": 1,
     "created_at": "2025-11-20T11:02:11.244335",
-    "updated_at": "2025-11-20T17:22:05.582384"
-  },
-  {
-    "username": "aa",
-    "score": 1,
-    "total_flips": 2,
-    "successful_flips": 1,
-    "longest_combo": 1,
-    "games_played": 1,
-    "created_at": "2025-11-20T11:02:39.865752",
-    "updated_at": "2025-11-20T11:02:44.002025"
+    "updated_at": "2025-12-26T15:13:40.246918"
   },
   {
     "username": "Eslem",
@@ -117,7 +107,7 @@
     "longest_combo": 4,
     "games_played": 1,
     "created_at": "2025-11-30T11:19:41.630852",
-    "updated_at": "2025-12-01T18:05:07.936204"
+    "updated_at": "2025-12-24T12:59:28.957155"
   },
   {
     "username": "As",
@@ -127,7 +117,7 @@
     "longest_combo": 3,
     "games_played": 1,
     "created_at": "2025-12-01T10:00:39.512123",
-    "updated_at": "2025-12-01T10:04:46.519502"
+    "updated_at": "2025-12-25T04:44:21.964338"
   },
   {
     "username": "anılagötten",
@@ -138,5 +128,115 @@
     "games_played": 1,
     "created_at": "2025-12-03T22:08:49.708744",
     "updated_at": "2025-12-03T22:11:20.968742"
+  },
+  {
+    "username": "enes",
+    "score": 8,
+    "total_flips": 31,
+    "successful_flips": 8,
+    "longest_combo": 2,
+    "games_played": 1,
+    "created_at": "2025-12-24T12:19:49.603168",
+    "updated_at": "2025-12-24T12:20:09.763910"
+  },
+  {
+    "username": "123",
+    "score": 2,
+    "total_flips": 5,
+    "successful_flips": 2,
+    "longest_combo": 2,
+    "games_played": 1,
+    "created_at": "2025-12-24T12:27:14.508811",
+    "updated_at": "2025-12-24T12:27:16.968908"
+  },
+  {
+    "username": "Sussy",
+    "score": 51,
+    "total_flips": 151,
+    "successful_flips": 51,
+    "longest_combo": 4,
+    "games_played": 1,
+    "created_at": "2025-12-24T12:55:17.519760",
+    "updated_at": "2025-12-24T13:01:02.458131"
+  },
+  {
+    "username": "ekzy",
+    "score": 20,
+    "total_flips": 75,
+    "successful_flips": 20,
+    "longest_combo": 3,
+    "games_played": 1,
+    "created_at": "2025-12-24T12:59:13.065354",
+    "updated_at": "2025-12-24T13:01:15.467154"
+  },
+  {
+    "username": "Onur",
+    "score": 62,
+    "total_flips": 30,
+    "successful_flips": 10,
+    "longest_combo": 2,
+    "games_played": 1,
+    "created_at": "2025-12-24T13:00:04.482389",
+    "updated_at": "2025-12-25T15:37:19.433577"
+  },
+  {
+    "username": "sussykim amk",
+    "score": 20,
+    "total_flips": 11,
+    "successful_flips": 3,
+    "longest_combo": 1,
+    "games_played": 1,
+    "created_at": "2025-12-24T13:14:47.235124",
+    "updated_at": "2025-12-24T14:41:23.385505"
+  },
+  {
+    "username": "Okan buruk",
+    "score": 5,
+    "total_flips": 3,
+    "successful_flips": 1,
+    "longest_combo": 1,
+    "games_played": 1,
+    "created_at": "2025-12-24T14:34:23.853528",
+    "updated_at": "2025-12-24T14:41:28.105860"
+  },
+  {
+    "username": "ehsss",
+    "score": 10,
+    "total_flips": 0,
+    "successful_flips": 0,
+    "longest_combo": 2,
+    "games_played": 0,
+    "created_at": "2025-12-26T11:34:33.547994",
+    "updated_at": "2025-12-26T12:03:12.896421"
+  },
+  {
+    "username": "Oyuncu",
+    "score": 15,
+    "total_flips": 0,
+    "successful_flips": 0,
+    "longest_combo": 7,
+    "games_played": 0,
+    "created_at": "2025-12-26T12:28:40.008873",
+    "updated_at": "2025-12-26T17:24:37.979902"
+  },
+  {
+    "username": "sue",
+    "score": 9999999,
+    "total_flips": 0,
+    "successful_flips": 0,
+    "longest_combo": 3,
+    "games_played": 0,
+    "created_at": "2025-12-26T16:30:37.464071",
+    "updated_at": "2025-12-26T16:37:42.484480"
+  },
+  {
+    "username": "Havali31ci",
+    "score": 135,
+    "total_flips": 0,
+    "successful_flips": 0,
+    "longest_combo": 13,
+    "games_played": 0,
+    "created_at": "2025-12-26T19:42:09.750703",
+    "updated_at": "2025-12-26T19:45:09.248399"
   }
 ]
